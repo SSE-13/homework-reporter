@@ -3,6 +3,8 @@ interface Repo {
     id: string;
 
     name: string;
+    
+    commits_url:string;
 
 }
 

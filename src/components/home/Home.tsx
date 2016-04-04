@@ -8,6 +8,9 @@ import * as ReactDOM from 'react-dom';
 import Button from './Button';
 import {getRepos} from './actions';
 
+import ReactDataGrid = require("react-datagrid");
+require('react-datagrid/index.css')
+
 class Home extends React.Component<ReduxProps & RepoProps, {}> {
 
 
@@ -19,10 +22,15 @@ class Home extends React.Component<ReduxProps & RepoProps, {}> {
     render() {
 
         var repoItems = this.props.repos.map((value) => <RepoItem {...value} />);
+        var data = this.props.repos.toArray();
+        var columns = [
+            { name: "id" },
+            { name: "name" }
+        ]
 
         return (
             <div>
-                {repoItems}
+                <ReactDataGrid idProperty="id" dataSource={data} columns={columns} />
             </div>
         )
 
@@ -42,16 +50,16 @@ class RepoItem extends React.Component<Repo, any>{
 import {connect} from 'react-redux';
 
 type RepoProps = {
-    
+
     repos: Immutable.List<Repo>;
-    
+
 }
 
-const select = (globalState:GlobalStoreDataType):RepoProps => {
+const select = (globalState: GlobalStoreDataType): RepoProps => {
     var git = globalState.git;
     var repos = git.get("repos");
-    repos =  repos ? repos : Immutable.List<Repo>();
-    return {repos};
+    repos = repos ? repos : Immutable.List<Repo>();
+    return { repos };
 }
 
 
