@@ -39,8 +39,10 @@ interface GlobalStoreDataType {
 
 interface GitType extends Immutable.Map<string, any> {
 
-    get(key:string):Immutable.Map<string,Repo>
+    get(key:string):Immutable.Map<string,any>
 
     get(key:"repos"):Immutable.Map<string,Repo>
+    
+    get(key:"commits"):Immutable.Map<string,Array<Commit>>
 
 }

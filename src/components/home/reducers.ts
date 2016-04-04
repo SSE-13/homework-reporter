@@ -24,13 +24,14 @@ export default function gitReducer(state: GitType = gitInitState, action: any) {
                 var item:Repo = data[i];
                 repos = repos.set(item.id,item)
             }  
-            return gitInitState.set("repos", repos);
+            return state.set("repos", repos);
         case actions.GET_COMMITS:
             var data = action.data;
-            var commits = Immutable.List(data);
-            var repo = gitInitState.get("repos").get("id");
-            
-            return state;
+            var commits = gitInitState.get("commits");
+            if (!commits){
+                commits = Immutable.Map<any>({});
+            }
+            return state.set("commits", commits.set(action.repoId,data));
     }
     return state;
 }
