@@ -8,6 +8,16 @@ interface Repo {
 
 }
 
+interface StudentHomework {
+    
+    studentId:string;
+    
+    studentName:string;
+    
+    repo:Repo;
+    
+}
+
 
 interface Commit {
     sha: string;
@@ -37,6 +47,16 @@ interface GlobalStoreDataType {
     
 }
 
+
+interface Student {
+    
+    
+    id:string;
+    
+    name:string;
+    
+}
+
 interface GitType extends Immutable.Map<string, any> {
 
     get(key:string):Immutable.Map<string,any>
@@ -44,5 +64,7 @@ interface GitType extends Immutable.Map<string, any> {
     get(key:"repos"):Immutable.Map<string,Repo>
     
     get(key:"commits"):Immutable.Map<string,Array<Commit>>
+    
+    get(key:"students"):Immutable.Map<string,Student>
 
 }

@@ -6,7 +6,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Button from './Button';
-import {getRepos} from './actions';
+import {getStudents, getRepos} from './actions';
 
 import ReactDataGrid = require("react-datagrid");
 require('react-datagrid/index.css')
@@ -16,16 +16,15 @@ class Home extends React.Component<ReduxProps & RepoProps, {}> {
 
     componentDidMount() {
 
+        this.props.dispatch(getStudents());
         this.props.dispatch(getRepos());
     }
 
     render() {
-
-        var repoItems = this.props.repos.map((value) => <RepoItem {...value} />);
-        var data = this.props.repos.toArray();
+        var data = this.props.homeworks.toArray();
         var columns = [
-            { name: "id" },
-            { name: "name" }
+            { name: "studentId" },
+            { name: "studentName" }
         ]
 
         return (
@@ -51,15 +50,25 @@ import {connect} from 'react-redux';
 
 type RepoProps = {
 
-    repos: Immutable.Map<string,Repo>;
+    homeworks: Immutable.Iterable<string, StudentHomework>
 
 }
 
+
+
 const select = (globalState: GlobalStoreDataType): RepoProps => {
     var git = globalState.git;
-    var repos = git.get("repos");
-    repos = repos ? repos : Immutable.Map<string,Repo>();
-    return { repos };
+    var students = git.get("students");
+
+
+    const mapper = (student: Student): StudentHomework => {
+        var repo: Repo = git.get("repos").get("1");
+        return { studentId:student.id,studentName:student.name, repo };
+    }
+
+    var homeworks: Immutable.Iterable<string, StudentHomework> = students.map(mapper);
+    // repos = repos.map((repo) => )
+    return { homeworks };
 }
 
 

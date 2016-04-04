@@ -12,6 +12,9 @@ var config = {
         extensions: ['', '.js', '.ts', '.tsx']
     },
     devtool: 'source-map',
+    externals:{
+        xlsx:"XLSX"
+    },
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'

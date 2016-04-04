@@ -11,5 +11,11 @@
 * 获取单个文件的提交日志，单个文件夹的提交日志
 
 
+#### TODO
+
+* xlsx-shim
+* raw-loader
+* index.html from build folder
+
 ### BrainStorming:
 * Electron 扩展支持
