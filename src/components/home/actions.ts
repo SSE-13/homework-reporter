@@ -42,7 +42,7 @@ export function getAllCommits() {
 
 
             const onSuccess = () => {
-
+                callback();
             }
 
             dispatch(getCommits(item, onSuccess))

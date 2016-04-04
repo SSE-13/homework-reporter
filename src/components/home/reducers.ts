@@ -1,7 +1,7 @@
 import * as actions from './actions';
 import * as Immutable from "immutable";
 
-var gitInitState:GitType = Immutable.fromJS({});
+var gitInitState:GitType = Immutable.fromJS({"repos":{},"commits":{}});
 
 const filterAllStudents = (item: Repo) => {
     var repoName = item.name;
@@ -19,7 +19,7 @@ export default function gitReducer(state: GitType = gitInitState, action: any) {
     switch (action.type) {
         case actions.GET_REPOS:
             var data = action.data.filter(filterAllStudents)
-            var repos:Immutable.Map<string,Repo> = Immutable.Map<string,Repo>();  
+            var repos:Immutable.Map<string,Repo> = state.get("repos");
             for (var i = 0 ; i < data.length ; i++){
                 var item:Repo = data[i];
                 repos = repos.set(item.id,item)
@@ -27,11 +27,7 @@ export default function gitReducer(state: GitType = gitInitState, action: any) {
             return state.set("repos", repos);
         case actions.GET_COMMITS:
             var data = action.data;
-            var commits = gitInitState.get("commits");
-            if (!commits){
-                commits = Immutable.Map<any>({});
-            }
-            return state.set("commits", commits.set(action.repoId,data));
+            return state.set("commits", state.get("commits").set(action.repoId,data));
     }
     return state;
 }
