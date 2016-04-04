@@ -39,8 +39,13 @@ export function getAllCommits() {
 
         const fetchCommits = (item: Repo, callback: Function) => {
 
-            var commitUrl = item.commits_url.replace("{/sha}", "?path=README.md");
-            dispatch(getCommits(commitUrl,callback))
+
+
+            const onSuccess = () => {
+
+            }
+
+            dispatch(getCommits(item, onSuccess))
 
         }
 
@@ -59,8 +64,8 @@ export function getAllCommits() {
 /**
  * todo:remove callback
  */
-export function getCommits(url,callback) {
-
+export function getCommits(repo: Repo, callback) {
+    let url = repo.commits_url.replace("{/sha}", "?path=README.md");
     return (dispatch) => {
 
         fetch(url)
@@ -68,12 +73,13 @@ export function getCommits(url,callback) {
             .then((value) => {
                 var obj = {
                     type: GET_COMMITS,
-                    data: value
+                    data: value,
+                    repoId:repo.id
                 }
                 let result = value.map((item) => item.commit.message);
                 console.log(result);
                 dispatch(obj);
-            callback();
+                callback();
             })
     }
 }

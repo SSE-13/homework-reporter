@@ -51,14 +51,14 @@ import {connect} from 'react-redux';
 
 type RepoProps = {
 
-    repos: Immutable.List<Repo>;
+    repos: Immutable.Map<string,Repo>;
 
 }
 
 const select = (globalState: GlobalStoreDataType): RepoProps => {
     var git = globalState.git;
     var repos = git.get("repos");
-    repos = repos ? repos : Immutable.List<Repo>();
+    repos = repos ? repos : Immutable.Map<string,Repo>();
     return { repos };
 }
 
