@@ -16,8 +16,27 @@ interface StudentHomework {
     
     repo:Repo;
     
+    homeworkState:Array<Homework>;
+    
 }
 
+
+interface Homework {
+    
+    state:HomeworkState;
+    
+    
+}
+
+
+declare const enum HomeworkState {
+    
+    FINISH = 0,
+    DELAY =1,
+    UN_FINISH  = 2
+    
+    
+}
 
 interface Commit {
     sha: string;

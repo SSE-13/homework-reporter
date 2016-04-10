@@ -36,7 +36,7 @@ export function getStudents() {
 
             const FIRST_ROW = 6;
             const LAST_ROW = 47;
-            var students = Immutable.Map<string,Student>();
+            var students = Immutable.OrderedMap<string,Student>();
             for (var i = FIRST_ROW; i <= LAST_ROW; i++) {
                 var student:Student = {
                     id: firstSheet[`A${i}`].h,

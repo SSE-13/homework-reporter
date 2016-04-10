@@ -17,14 +17,29 @@ class Home extends React.Component<ReduxProps & RepoProps, {}> {
     componentDidMount() {
 
         this.props.dispatch(getStudents());
-        this.props.dispatch(getRepos());
+        // this.props.dispatch(getRepos());
     }
 
     render() {
+
+        var i18n = {};
+        i18n[HomeworkState.FINISH] = "完成";
+        i18n[HomeworkState.DELAY] = "延期";
+        i18n[HomeworkState.UN_FINISH] = "未完成";
+
+        const homeworkStateRender = (value: Array<Homework>) => {
+            let contents = value.map((homework) => <span>{i18n[homework.state]}  </span>)
+            let result = <div>{contents}</div>
+            return result;
+
+        };
+
         var data = this.props.homeworks.toArray();
         var columns = [
-            { name: "studentId" },
-            { name: "studentName" }
+            { name: "studentId", title:"学号",width: 100 },
+            { name: "studentName", title:"姓名",width: 150 },
+
+            { name: "homeworkState", title:"作业完成情况",render: homeworkStateRender }
         ]
 
         return (
@@ -63,7 +78,8 @@ const select = (globalState: GlobalStoreDataType): RepoProps => {
 
     const mapper = (student: Student): StudentHomework => {
         var repo = git.get("repos").get("1");
-        return { studentId:student.id,studentName:student.name, repo };
+        var homeworkState = { state: HomeworkState.FINISH };
+        return { studentId: student.id, studentName: student.name, repo, homeworkState: [homeworkState, homeworkState, homeworkState, homeworkState, homeworkState, homeworkState] };
     }
 
     var homeworks: Immutable.Iterable<string, StudentHomework> = students.map(mapper);
