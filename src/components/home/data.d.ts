@@ -57,14 +57,25 @@ interface Student {
     
 }
 
-interface GitType extends Immutable.Map<string, any> {
+interface GitType extends Immutable.Map<string,any>{
 
-    get(key:string):Immutable.Map<string,any>
+    // get(key:string):Immutable.Map<string,any>
+    
+    get(key:"repos"|"commits"|"students"):Immutable.Map<string,any>
 
     get(key:"repos"):Immutable.Map<string,Repo>
     
     get(key:"commits"):Immutable.Map<string,Array<Commit>>
     
     get(key:"students"):Immutable.Map<string,Student>
+    
+    
+   
 
 }
+
+
+
+//  
+
+

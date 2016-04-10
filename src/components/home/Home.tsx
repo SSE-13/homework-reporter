@@ -62,7 +62,7 @@ const select = (globalState: GlobalStoreDataType): RepoProps => {
 
 
     const mapper = (student: Student): StudentHomework => {
-        var repo: Repo = git.get("repos").get("1");
+        var repo = git.get("repos").get("1");
         return { studentId:student.id,studentName:student.name, repo };
     }
 
