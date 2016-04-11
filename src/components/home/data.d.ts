@@ -5,6 +5,8 @@ interface Repo {
     name: string;
     
     commits_url:string;
+    
+    html_url:string;
 
 }
 
@@ -73,6 +75,8 @@ interface Student {
     id:string;
     
     name:string;
+    
+    repoId?:string;
     
 }
 

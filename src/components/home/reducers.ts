@@ -6,7 +6,12 @@ import * as Immutable from "immutable";
 var gitInitState: GitType = Immutable.fromJS({ "repos": {}, "commits": {}, "students": {} });
 
 const filterAllStudents = (item: Repo) => {
-    var repoName = item.name;
+    let studentId = getStudentId(item);
+    return (studentId.substr(0, 2) == "13" || studentId.substr(0, 2) == "12");
+}
+
+const getStudentId = (item: Repo) => {
+    let repoName = item.name;
     let studentId = repoName.split("_")[1];
     if (!studentId) {
         studentId = repoName.split("-")[1];
@@ -14,7 +19,7 @@ const filterAllStudents = (item: Repo) => {
     if (!studentId) {
         studentId = repoName;
     }
-    return (studentId.substr(0, 2) == "13" || studentId.substr(0, 2) == "12");
+    return studentId;
 }
 
 export default function gitReducer(state: GitType = gitInitState, action: any) {
@@ -25,7 +30,17 @@ export default function gitReducer(state: GitType = gitInitState, action: any) {
             for (var i = 0; i < data.length; i++) {
                 var item: Repo = data[i];
                 repos = repos.set(item.id, item)
+                var student = state.get("students").update((value)=>{
+                    let studentId = getStudentId(item);
+                    var student = value.get(studentId);
+                    student.repoId = item.id;
+                    return value.set(studentId,student);
+                })
+                state.set("students",student);
             }
+            
+           
+            
             return state.set("repos", repos);
         case actions.GET_COMMITS:
             var data = action.data;

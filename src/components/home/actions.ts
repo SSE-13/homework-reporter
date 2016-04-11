@@ -1,6 +1,6 @@
 export const GET_REPOS: string = "getRepos";
 export const GET_COMMITS: string = "getCommits";
-export const GET_STUDENTS:string = "getStudents";
+export const GET_STUDENTS: string = "getStudents";
 import * as Immutable from 'immutable';
 import xlsx = require('xlsx');
 import * as async from 'async';
@@ -36,16 +36,16 @@ export function getStudents() {
 
             const FIRST_ROW = 6;
             const LAST_ROW = 47;
-            var students = Immutable.OrderedMap<string,Student>();
+            var students = Immutable.OrderedMap<string, Student>();
             for (var i = FIRST_ROW; i <= LAST_ROW; i++) {
-                var student:Student = {
+                var student: Student = {
                     id: firstSheet[`A${i}`].h,
                     name: firstSheet[`B${i}`].h
                 };
-                
-                students = students.set(student.id,student);
-            }          
-            dispatch({type:GET_STUDENTS,data:students});
+
+                students = students.set(student.id, student);
+            }
+            dispatch({ type: GET_STUDENTS, data: students });
         }
 
         oReq.send();
@@ -112,7 +112,8 @@ export function getAllCommits() {
  * todo:remove callback
  */
 export function getCommits(repo: Repo, callback) {
-    let url = repo.commits_url.replace("{/sha}", "?path=README.md");
+    // let url = repo.commits_url.replace("{/sha}", "?path=README.md");
+    let url = repo.commits_url.replace("{/sha}", "");
     return (dispatch) => {
 
         fetch(url)

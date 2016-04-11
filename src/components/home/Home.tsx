@@ -17,7 +17,7 @@ class Home extends React.Component<ReduxProps & RepoProps, {}> {
     componentDidMount() {
 
         this.props.dispatch(getStudents());
-        // this.props.dispatch(getRepos());
+        this.props.dispatch(getRepos());
     }
 
     render() {
@@ -33,13 +33,27 @@ class Home extends React.Component<ReduxProps & RepoProps, {}> {
             return result;
 
         };
+        
+        
+
+        const repoRender = (value: Repo) => {
+            if (!value) {
+                return <p>无法找到Repo</p>;
+            }
+            else {
+                return <a href={value.html_url}>GitHub地址</a>;
+            }
+
+
+
+        }
 
         var data = this.props.homeworks.toArray();
         var columns = [
-            { name: "studentId", title:"学号",width: 100 },
-            { name: "studentName", title:"姓名",width: 150 },
-
-            { name: "homeworkState", title:"作业完成情况",render: homeworkStateRender }
+            { name: "studentId", title: "学号", width: 100 },
+            { name: "studentName", title: "姓名", width: 150 },
+            { name: "repo", width: 100, render: repoRender },
+            { name: "homeworkState", title: "作业完成情况", render: homeworkStateRender }
         ]
 
         return (
@@ -77,9 +91,18 @@ const select = (globalState: GlobalStoreDataType): RepoProps => {
 
 
     const mapper = (student: Student): StudentHomework => {
-        var repo = git.get("repos").get("1");
+        var repo = git.get("repos").get(student.repoId);
+        // if (!repo){
+        //     alert (`error student repoId :${student.repoId}`)
+        // }
+        console.log(repo)
         var homeworkState = { state: HomeworkState.FINISH };
-        return { studentId: student.id, studentName: student.name, repo, homeworkState: [homeworkState, homeworkState, homeworkState, homeworkState, homeworkState, homeworkState] };
+        return {
+            studentId: student.id,
+            studentName: student.name,
+            repo,
+            homeworkState: [homeworkState, homeworkState, homeworkState, homeworkState, homeworkState, homeworkState]
+        };
     }
 
     var homeworks: Immutable.Iterable<string, StudentHomework> = students.map(mapper);
