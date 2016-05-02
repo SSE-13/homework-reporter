@@ -53,13 +53,15 @@ export function getStudents() {
 }
 
 
+
+
 export function getRepos() {
     return (dispatch: any) => {
 
         let url = `https://api.github.com/orgs/${org}/repos?per_page=60`;
 
-        fetch(url, {})
-            .then((response: Response) => response.json())
+
+        fetchDataFromGithub(url)
             .then(value => {
                 let obj = {
                     type: GET_REPOS,
@@ -113,21 +115,76 @@ export function getAllCommits() {
  */
 export function getCommits(repo: Repo, callback) {
     // let url = repo.commits_url.replace("{/sha}", "?path=README.md");
-    let url = repo.commits_url.replace("{/sha}", "");
+  
+    
     return (dispatch) => {
 
-        fetch(url)
-            .then((response) => response.json())
+        var page = 1;
+        
+        var isFinished = false;
+        var per_page = 30;
+        
+        
+        const onDoWhilstFinished = (err)=>{
+            if (!err){
+                callback();
+            }
+        }
+        
+        const condition = ()=> !isFinished;
+        
+        const fn = (c)=>{
+            
+              let url = repo.commits_url.replace("{/sha}", "") + `?per_page=${per_page}`;
+              url += `&page=${page}`
+            
+             fetchDataFromGithub(url)
             .then((value) => {
                 var obj = {
                     type: GET_COMMITS,
                     data: value,
                     repoId: repo.id
                 }
+                if (value.length  < per_page){
+                    isFinished = true
+                }
                 let result = value.map((item) => item.commit.message);
-                console.log(result);
-                dispatch(obj);
-                callback();
-            })
+                c();
+            })    
+        }
+        
+        async.doWhilst(fn ,condition,onDoWhilstFinished);
+        
     }
+}
+
+
+function fetchDataFromGithub(url):Promise<any>{
+    
+    
+    var promise = (resolve,reject)=>{
+        
+        fetch(url).then((response)=>{
+            console.log (response);
+            if (!response.ok){
+                alert ("error");
+            }
+            else{
+                return response.json();
+            }
+            
+            
+            
+        }).then((value)=>{
+            if (value){
+                resolve(value);
+            }
+        });
+        
+        
+    };
+    
+    return new Promise(promise);
+    
+    
 }
