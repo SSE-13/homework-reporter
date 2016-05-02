@@ -5,7 +5,8 @@ var pathToReact = path.resolve(node_modules, 'react/dist/react.min.js');
 
 var config = {
     entry: [
-        'webpack/hot/dev-server',
+        'webpack-dev-server/client?http://localhost:8080',
+        'webpack/hot/only-dev-server',
         path.resolve(__dirname, 'src/main')
     ],
     resolve: {
@@ -23,7 +24,7 @@ var config = {
         loaders: [
             {
                 test: /\.tsx?$/,
-                loader: 'ts-loader'
+                loaders: ['react-hot','ts-loader']
             },
             {
                 test: /\.css$/, // Only .css files
@@ -36,7 +37,7 @@ var config = {
         ]
     },
     plugins: [
-        //new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin()
     ]
 };
 
